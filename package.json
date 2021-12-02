@@ -26,6 +26,8 @@
   },
   "dependencies": {
     "@rollup/plugin-alias": "^3.1.8",
+    "downloadjs": "^1.4.7",
+    "html-to-image": "^1.9.0",
     "interactjs": "^1.10.11",
     "sass": "^1.43.4",
     "sirv-cli": "^1.0.0"
