@@ -1,8 +1,11 @@
 <script lang="ts">
   import { writable } from "svelte/store";
+  import downloadjs from "downloadjs";
+  import { toJpeg } from "html-to-image";
 
   import MainRender from "~/components/MainRender.svelte";
 
+  let renderElement: HTMLElement;
   let file: FileList;
   let imageDataURL: string;
   let imageWidth: number;
@@ -54,6 +57,17 @@
     $numberingItems.splice(index, 1);
     numberingItems.set([...$numberingItems]);
   };
+
+  const downloadMainRender = () => {
+    if (!renderElement) {
+      return;
+    }
+    const width = renderElement.clientWidth;
+    const height = renderElement.clientHeight;
+    toJpeg(renderElement, { width, height }).then((dataUrl) => {
+      downloadjs(dataUrl, "labeled-image.jpg");
+    });
+  };
 </script>
 
 <main>
@@ -62,6 +76,10 @@
   </div>
 
   {#if imageDataURL}
+    <div>
+      <span on:click={downloadMainRender}>ダウンロード</span>
+    </div>
+
     <div>
       <input type="color" bind:value={listColor} style="height:32px;" />
       <input type="range" bind:value={listAlpha} min="0" max="100" step="10" />
@@ -115,27 +133,32 @@
       </li>
     </ol>
 
-    <MainRender
-      {imageDataURL}
-      {listPos}
-      {listOverlay}
-      numberingItems={$numberingItems}
-      --image-width={`${imageWidth}px`}
-      --image-height={`${imageHeight}px`}
-      --list-rgb={listColor}
-      --list-rgba={listColor + toHEX(listAlpha)}
-      --list-font-color={listFontColor}
-      --list-font-size={`${listFontSize}px`}
-      --label-rgb={labelColor}
-      --label-rgba={labelColor + toHEX(labelAlpha)}
-      --label-font-color={labelFontColor}
-      --label-font-size={`${labelFontSize}px`}
-    />
+    <div bind:this={renderElement} class="MainRenderWrapper">
+      <MainRender
+        {imageDataURL}
+        {listPos}
+        {listOverlay}
+        numberingItems={$numberingItems}
+        --image-width={`${imageWidth}px`}
+        --image-height={`${imageHeight}px`}
+        --list-rgb={listColor}
+        --list-rgba={listColor + toHEX(listAlpha)}
+        --list-font-color={listFontColor}
+        --list-font-size={`${listFontSize}px`}
+        --label-rgb={labelColor}
+        --label-rgba={labelColor + toHEX(labelAlpha)}
+        --label-font-color={labelFontColor}
+        --label-font-size={`${labelFontSize}px`}
+      />
+    </div>
   {/if}
 </main>
 
 <style>
   main {
     padding: 1em;
+  }
+  .MainRenderWrapper {
+    width: fit-content;
   }
 </style>

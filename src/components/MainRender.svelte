@@ -51,20 +51,23 @@
   <img src={imageDataURL} alt="" class="MainRender__photo" />
 
   <ol class="MainRender__labels">
-    {#each numberingItems as _, i}
+    {#each numberingItems as _, index}
       <li
         class="MainRender__draggable-label"
-        style={`transform: translate(${i * labelSpan}px, 0);`}
-        data-x={i * labelSpan}
+        style={`transform: translate(${index * labelSpan}px, 0);`}
+        data-x={index * labelSpan}
       >
-        <!-- Blank -->
+        {index + 1}
       </li>
     {/each}
   </ol>
 
   <ol class="MainRender__list">
-    {#each numberingItems as item}
-      <li>{item}</li>
+    {#each numberingItems as item, index}
+      <li>
+        <i>{index + 1}</i>
+        {item}
+      </li>
     {/each}
   </ol>
 </div>
@@ -96,7 +99,6 @@
       font-size: var(--label-font-size);
       box-sizing: border-box;
       > li {
-        display: inline-block;
         position: absolute;
       }
     }
@@ -110,8 +112,8 @@
       font-size: var(--list-font-size);
       box-sizing: border-box;
     }
-    &__labels > li:before,
-    &__list > li:before {
+    &__labels > li,
+    &__list > li > i {
       content: counter(numbering-label);
       counter-increment: numbering-label;
       display: inline-block;
@@ -120,15 +122,16 @@
       border-radius: 100%;
       font-family: Arial, Helvetica, sans-serif;
       font-weight: bold;
+      font-style: normal;
       line-height: 1.2em;
       text-align: center;
     }
-    &__labels > li:before {
+    &__labels > li {
       background-color: var(--label-rgba);
       padding: 2px;
       color: var(--label-font-color);
     }
-    &__list > li:before {
+    &__list > li > i {
       margin-right: 4px;
       background-color: var(--list-font-color);
       padding: 1px;
