@@ -1,9 +1,12 @@
 <script lang="ts">
   import interact from "interactjs";
   import { onMount } from "svelte";
-  export let pos;
-  export let overlay;
-  export let imageDataURL;
+  export let imageDataURL: string;
+  export let listPos: string;
+  export let listOverlay: boolean;
+  export let numberingItems: string[];
+
+  const labelSpan = 48;
 
   onMount(() => {
     // target elements with the "draggable" class
@@ -41,37 +44,28 @@
 </script>
 
 <div
-  class="MainRender MainRender--pos-{pos}"
-  class:MainRender--overlay={overlay}
+  class="MainRender"
+  class:MainRender--overlay={listOverlay}
+  data-pos={listPos}
 >
   <img src={imageDataURL} alt="" class="MainRender__photo" />
+
   <ol class="MainRender__labels">
-    {#each Array(15) as _, i}
+    {#each numberingItems as _, i}
       <li
         class="MainRender__draggable-label"
-        style={`transform: translate(${i * 48}px, 0);`}
-        data-x={i * 48}
+        style={`transform: translate(${i * labelSpan}px, 0);`}
+        data-x={i * labelSpan}
       >
         <!-- Blank -->
       </li>
     {/each}
   </ol>
+
   <ol class="MainRender__list">
-    <li>ぶどう</li>
-    <li>レモン</li>
-    <li>オレンジ</li>
-    <li>りんご</li>
-    <li>もも</li>
-    <li>ぶどう</li>
-    <li>レモン</li>
-    <li>オレンジ</li>
-    <li>りんご</li>
-    <li>もも</li>
-    <li>ぶどう</li>
-    <li>レモン</li>
-    <li>オレンジ</li>
-    <li>りんご</li>
-    <li>もも</li>
+    {#each numberingItems as item}
+      <li>{item}</li>
+    {/each}
   </ol>
 </div>
 
@@ -98,7 +92,7 @@
       height: var(--image-height);
       margin: 0;
       padding: 16px;
-      color: #fff;
+      color: var(--label-font-color);
       font-size: var(--label-font-size);
       box-sizing: border-box;
       > li {
@@ -111,8 +105,8 @@
       list-style: none;
       margin: 0;
       padding: 16px;
-      background-color: var(--theme-rgba);
-      color: #fff;
+      background-color: var(--list-rgb);
+      color: var(--list-font-color);
       font-size: var(--list-font-size);
       box-sizing: border-box;
     }
@@ -130,23 +124,24 @@
       text-align: center;
     }
     &__labels > li:before {
-      background-color: var(--theme-rgb);
-      border: 2px solid var(--theme-rgb);
-      color: #fff;
+      background-color: var(--label-rgba);
+      padding: 2px;
+      color: var(--label-font-color);
     }
     &__list > li:before {
       margin-right: 4px;
-      background-color: #fff;
-      border: 1px solid #fff;
-      color: var(--theme-rgb);
+      background-color: var(--list-font-color);
+      padding: 1px;
+      color: var(--list-rgb);
     }
 
     &--overlay &__list {
       position: absolute;
       bottom: 0;
       right: 0;
+      background-color: var(--list-rgba);
     }
-    &--pos-right &__list {
+    &[data-pos="right"] &__list {
       display: grid;
       grid-template-rows: repeat(auto-fill, minmax(1.5em, 1fr));
       grid-auto-flow: column;
@@ -154,16 +149,22 @@
       min-height: var(--image-height);
       max-height: var(--image-height);
     }
-    &--pos-bottom {
+    &[data-pos="bottom"] {
       flex-direction: column;
     }
-    &--pos-bottom &__list {
+    &[data-pos="bottom"] &__list {
       flex-direction: column;
       display: flex;
       flex-flow: row wrap;
       gap: 1em;
       min-width: var(--image-width);
       max-width: var(--image-width);
+    }
+    &__labels,
+    &__list {
+      &:empty {
+        display: none !important;
+      }
     }
   }
 </style>
