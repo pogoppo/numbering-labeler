@@ -1,40 +1,27 @@
 <script lang="ts">
   import interact from "interactjs";
   import { onMount } from "svelte";
-  export let imageDataURL: string;
-  export let listPos: string;
-  export let listOverlay: boolean;
-  export let numberingItems: string[];
+  import { image, list, numberingItems } from "~/stores/render-options";
 
   const labelSpan = 48;
 
   onMount(() => {
-    // target elements with the "draggable" class
     interact(".MainRender__draggable-label").draggable({
-      // enable inertial throwing
       inertia: false,
-      // keep the element within the area of it's parent
       modifiers: [
         interact.modifiers.restrictRect({
           restriction: "parent",
           endOnly: true,
         }),
       ],
-      // enable autoScroll
       autoScroll: true,
-
       listeners: {
-        // call this function on every dragmove event
         move(event) {
           const target = event.target;
-          // keep the dragged position in the data-x/data-y attributes
           const x = (parseFloat(target.getAttribute("data-x")) || 0) + event.dx;
           const y = (parseFloat(target.getAttribute("data-y")) || 0) + event.dy;
 
-          // translate the element
           target.style.transform = "translate(" + x + "px, " + y + "px)";
-
-          // update the posiion attributes
           target.setAttribute("data-x", x);
           target.setAttribute("data-y", y);
         },
@@ -45,28 +32,29 @@
 
 <div
   class="MainRender"
-  class:MainRender--overlay={listOverlay}
-  data-pos={listPos}
+  class:MainRender--overlay={$list.overlay}
+  data-pos={$list.pos}
 >
-  <img src={imageDataURL} alt="" class="MainRender__photo" />
+  <img src={$image.url} alt="" class="MainRender__photo" />
 
   <ol class="MainRender__labels">
-    {#each numberingItems as _, index}
+    {#each $numberingItems as item, index}
       <li
         class="MainRender__draggable-label"
         style={`transform: translate(${index * labelSpan}px, 0);`}
         data-x={index * labelSpan}
       >
-        {index + 1}
+        <i class="MainRender__item-number">{index + 1}</i>
+        <span class="MainRender__item-text">{item}</span>
       </li>
     {/each}
   </ol>
 
   <ol class="MainRender__list">
-    {#each numberingItems as item, index}
+    {#each $numberingItems as item, index}
       <li>
-        <i>{index + 1}</i>
-        {item}
+        <i class="MainRender__item-number">{index + 1}</i>
+        <span class="MainRender__item-text">{item}</span>
       </li>
     {/each}
   </ol>
@@ -112,8 +100,7 @@
       font-size: var(--list-font-size);
       box-sizing: border-box;
     }
-    &__labels > li,
-    &__list > li > i {
+    &__item-number {
       content: counter(numbering-label);
       counter-increment: numbering-label;
       display: inline-block;
@@ -126,18 +113,20 @@
       line-height: 1.2em;
       text-align: center;
     }
-    &__labels > li {
+    &__labels &__item-number {
       background-color: var(--label-rgba);
       padding: 2px;
       color: var(--label-font-color);
     }
-    &__list > li > i {
+    &__labels &__item-text {
+      display: none;
+    }
+    &__list &__item-number {
       margin-right: 4px;
       background-color: var(--list-font-color);
       padding: 1px;
       color: var(--list-rgb);
     }
-
     &--overlay &__list {
       position: absolute;
       bottom: 0;

@@ -1,156 +1,46 @@
 <script lang="ts">
-  import { writable } from "svelte/store";
-  import downloadjs from "downloadjs";
-  import { toJpeg } from "html-to-image";
+  import { image, list, label, numberingItems } from "~/stores/render-options";
 
   import MainRender from "~/components/MainRender.svelte";
+  import StartUp from "~/components/StartUp.svelte";
+  import DownloadRender from "~/components/DownloadRender.svelte";
+  import LabelItemList from "~/components/LabelItemList.svelte";
+  import RenderOptionControl from "~/components/RenderOptionControl.svelte";
 
   let renderElement: HTMLElement;
-  let file: FileList;
-  let imageDataURL: string;
-  let imageWidth: number;
-  let imageHeight: number;
 
-  let listPos = "bottom";
-  let listOverlay = false;
-  let listColor = "#000000";
-  let listAlpha = 100;
-  let listFontColor = "#ffffff";
-  let listFontSize = 16;
-
-  let labelColor = "#000000";
-  let labelAlpha = 100;
-  let labelFontColor = "#ffffff";
-  let labelFontSize = 24;
-
-  const numberingItems = writable([]);
-
-  const readFile = (event: any) => {
-    const reader = new FileReader();
-    const imageFile = event.target.files[0];
-    reader.readAsDataURL(imageFile);
-    reader.onload = () => {
-      const img = new Image();
-      img.onload = () => {
-        imageWidth = img.width;
-        imageHeight = img.height;
-        imageDataURL = reader.result as string;
-      };
-      img.src = reader.result as string;
-    };
-  };
+  $: {
+    $image.url;
+    numberingItems.set([]);
+  }
 
   const toHEX = (n: number) =>
     Math.round(n * 2.55)
       .toString(16)
       .padStart(2, "0");
-
-  function addNumberingItem(input: HTMLInputElement) {
-    if (input.value === "") {
-      return;
-    }
-    numberingItems.set([...$numberingItems, input.value]);
-    input.value = "";
-  }
-
-  const removeNumberingItem = (index: number) => {
-    $numberingItems.splice(index, 1);
-    numberingItems.set([...$numberingItems]);
-  };
-
-  const downloadMainRender = () => {
-    if (!renderElement) {
-      return;
-    }
-    const width = renderElement.clientWidth;
-    const height = renderElement.clientHeight;
-    toJpeg(renderElement, { width, height }).then((dataUrl) => {
-      downloadjs(dataUrl, "labeled-image.jpg");
-    });
-  };
 </script>
 
 <main>
-  <div>
-    <input type="file" bind:files={file} on:change={readFile} />
-  </div>
+  <StartUp />
 
-  {#if imageDataURL}
-    <div>
-      <span on:click={downloadMainRender}>ダウンロード</span>
-    </div>
-
-    <div>
-      <input type="color" bind:value={listColor} style="height:32px;" />
-      <input type="range" bind:value={listAlpha} min="0" max="100" step="10" />
-      <input type="color" bind:value={listFontColor} style="height:32px;" />
-      <input
-        type="range"
-        bind:value={listFontSize}
-        min="10"
-        max="24"
-        step="1"
-      />
-      <div>
-        <span on:click={() => (listPos = "bottom")}>bottom</span>
-        <span on:click={() => (listPos = "right")}>right</span>
-        <span on:click={() => (listOverlay = !listOverlay)}>overlay</span>
-      </div>
-    </div>
-    <div>
-      <input type="color" bind:value={labelColor} style="height:32px;" />
-      <input type="range" bind:value={labelAlpha} min="0" max="100" step="10" />
-      <input type="color" bind:value={labelFontColor} style="height:32px;" />
-      <input
-        type="range"
-        bind:value={labelFontSize}
-        min="16"
-        max="48"
-        step="2"
-      />
-    </div>
-
-    <ol>
-      {#each $numberingItems as item, index}
-        <li>
-          <input type="text" bind:value={item} />
-          <span on:click={() => removeNumberingItem(index)}>削除</span>
-        </li>
-      {/each}
-      <li>
-        <input
-          type="text"
-          placeholder="項目"
-          on:blur={function () {
-            addNumberingItem(this);
-          }}
-          on:keypress={function (event) {
-            if (event.key == "Enter") {
-              addNumberingItem(this);
-            }
-          }}
-        />
-      </li>
-    </ol>
-
+  {#if $image.url}
+    <LabelItemList />
+    <RenderOptionControl />
     <div bind:this={renderElement} class="MainRenderWrapper">
       <MainRender
-        {imageDataURL}
-        {listPos}
-        {listOverlay}
-        numberingItems={$numberingItems}
-        --image-width={`${imageWidth}px`}
-        --image-height={`${imageHeight}px`}
-        --list-rgb={listColor}
-        --list-rgba={listColor + toHEX(listAlpha)}
-        --list-font-color={listFontColor}
-        --list-font-size={`${listFontSize}px`}
-        --label-rgb={labelColor}
-        --label-rgba={labelColor + toHEX(labelAlpha)}
-        --label-font-color={labelFontColor}
-        --label-font-size={`${labelFontSize}px`}
+        --image-width={`${$image.width}px`}
+        --image-height={`${$image.height}px`}
+        --list-rgb={$list.color}
+        --list-rgba={$list.color + toHEX($list.alpha)}
+        --list-font-color={$list.fontColor}
+        --list-font-size={`${$list.fontSize}px`}
+        --label-rgb={$label.color}
+        --label-rgba={$label.color + toHEX($label.alpha)}
+        --label-font-color={$label.fontColor}
+        --label-font-size={`${$label.fontSize}px`}
       />
     </div>
+    <DownloadRender {renderElement} />
   {/if}
 </main>
 
