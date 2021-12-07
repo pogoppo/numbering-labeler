@@ -21,34 +21,36 @@
   };
 </script>
 
-<ol>
-  {#each $numberingItems as item, index}
+<div class="LabelItemList">
+  <ol>
+    {#each $numberingItems as item, index}
+      <li>
+        <input
+          type="text"
+          bind:value={item}
+          on:blur={() => changeItem(index)}
+          on:keypress={(event) => {
+            if (event.key == "Enter") {
+              changeItem(index);
+            }
+          }}
+        />
+        <span on:click={() => removeItem(index)}>削除</span>
+      </li>
+    {/each}
     <li>
       <input
         type="text"
-        bind:value={item}
-        on:blur={() => changeItem(index)}
-        on:keypress={(event) => {
+        placeholder="項目"
+        on:blur={function () {
+          addItem(this);
+        }}
+        on:keypress={function (event) {
           if (event.key == "Enter") {
-            changeItem(index);
+            addItem(this);
           }
         }}
       />
-      <span on:click={() => removeItem(index)}>削除</span>
     </li>
-  {/each}
-  <li>
-    <input
-      type="text"
-      placeholder="項目"
-      on:blur={function () {
-        addItem(this);
-      }}
-      on:keypress={function (event) {
-        if (event.key == "Enter") {
-          addItem(this);
-        }
-      }}
-    />
-  </li>
-</ol>
+  </ol>
+</div>

@@ -8,14 +8,27 @@
     if (!renderElement) {
       return;
     }
-    const width = renderElement.clientWidth;
-    const height = renderElement.clientHeight;
-    toJpeg(renderElement, { width, height }).then((dataUrl) => {
+    const options = {
+      width: renderElement.clientWidth,
+      height: renderElement.clientHeight,
+      style: { margin: "0" },
+    };
+    toJpeg(renderElement, options).then((dataUrl) => {
       downloadjs(dataUrl, "labeled-image.jpg");
     });
   };
 </script>
 
-<div>
-  <span on:click={download}>ダウンロード</span>
-</div>
+<div class="DownloadRender" on:click={download}>ダウンロード</div>
+
+<style lang="scss">
+  .DownloadRender {
+    width: 100%;
+    padding: 16px 24px;
+    background-color: var(--color-orange);
+    font-size: 1.2rem;
+    text-align: center;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+</style>

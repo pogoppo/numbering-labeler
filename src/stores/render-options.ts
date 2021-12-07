@@ -23,3 +23,5 @@ export const label = writable({
 });
 
 export const numberingItems = writable([]);
+
+export const renderElement = writable(null as HTMLElement);
