@@ -12,8 +12,6 @@
   import RenderOptionControl from "~/components/RenderOptionControl.svelte";
   import DownloadRender from "~/components/DownloadRender.svelte";
 
-  let workspaceElement: HTMLElement;
-
   addMessages("ja", JA);
   init({
     fallbackLocale: "ja",
@@ -27,7 +25,7 @@
 
   onMount(() => {
     $render_.sbInstance = new ScrollBooster({
-      viewport: workspaceElement,
+      viewport: $render_.workspace,
       scrollMode: "native",
       emulateScroll: true,
       bounce: true,
@@ -51,8 +49,8 @@
     <RenderOptionControl />
   </div>
 
-  <div bind:this={workspaceElement} class="AppLayout__workspace">
-    <div bind:this={$render_.element} class="AppLayout__render">
+  <div bind:this={$render_.workspace} class="AppLayout__workspace">
+    <div bind:this={$render_.render} class="AppLayout__render">
       {#if $image.url}
         <MainRender
           zoom={$render_.zoom}
@@ -75,7 +73,7 @@
 
   <div class="AppLayout__list" class:AppLayout__list--disabled={!!!$image.url}>
     <LabelItemList />
-    <DownloadRender renderElement={$render_.element} />
+    <DownloadRender renderElement={$render_.render} />
   </div>
 </main>
 
@@ -117,6 +115,15 @@
   }
   .AppLayout__control,
   .AppLayout__list {
+    max-height: 100vh;
     background-color: rgba(0, 0, 0, 0.1);
+    &--disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+  .AppLayout__list {
+    display: grid;
+    grid-template-rows: 1fr 64px;
   }
 </style>

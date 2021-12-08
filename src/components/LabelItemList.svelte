@@ -75,6 +75,7 @@
     list-style: none;
     margin: 0;
     padding: 4px;
+    overflow-y: auto;
     > li {
       padding: 4px 8px;
       input[type="text"] {

@@ -24,7 +24,8 @@ export const label = writable({
 });
 
 export const render_ = writable({
-  element: null as HTMLElement,
+  render: null as HTMLElement,
+  workspace: null as HTMLElement,
   labels: [],
   zoom: 1,
   sbInstance: null as ScrollBooster
