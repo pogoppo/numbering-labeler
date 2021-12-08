@@ -1,4 +1,5 @@
 import { writable } from "svelte/store";
+import type ScrollBooster from "scrollbooster";
 
 export const image = writable({
   url: "",
@@ -22,6 +23,9 @@ export const label = writable({
   fontSize: 24,
 });
 
-export const numberingItems = writable([]);
-
-export const renderElement = writable(null as HTMLElement);
+export const render_ = writable({
+  element: null as HTMLElement,
+  labels: [],
+  zoom: 1,
+  sbInstance: null as ScrollBooster
+});

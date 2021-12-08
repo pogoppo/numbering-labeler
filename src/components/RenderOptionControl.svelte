@@ -1,5 +1,16 @@
 <script lang="ts">
-  import { list, label } from "~/stores/render-options";
+  import { tick } from "svelte";
+
+  import { list, label, render_ } from "~/stores/render-options";
+
+  $: {
+    $list.pos;
+    $list.overlay;
+    (async () => {
+      await tick();
+      $render_.sbInstance?.updateMetrics();
+    })();
+  }
 </script>
 
 <div>

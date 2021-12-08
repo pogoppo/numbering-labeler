@@ -1,9 +1,11 @@
 <script lang="ts">
   import interact from "interactjs";
   import { onMount } from "svelte";
-  import { image, list, numberingItems } from "~/stores/render-options";
+  import { image, list, render_ } from "~/stores/render-options";
 
-  const labelSpan = 32;
+  export let zoom = 1;
+  export let labelSpan = 32;
+
   let maxLabelXPos: number;
 
   $: {
@@ -23,8 +25,12 @@
       listeners: {
         move(event) {
           const target = event.target;
-          const x = (parseFloat(target.getAttribute("data-x")) || 0) + event.dx;
-          const y = (parseFloat(target.getAttribute("data-y")) || 0) + event.dy;
+          const x =
+            (parseFloat(target.getAttribute("data-x")) || 0) +
+            event.dx * (1 / zoom);
+          const y =
+            (parseFloat(target.getAttribute("data-y")) || 0) +
+            event.dy * (1 / zoom);
 
           target.style.transform = "translate(" + x + "px, " + y + "px)";
           target.setAttribute("data-x", x);
@@ -35,11 +41,15 @@
   });
 </script>
 
-<div class="MainRender" data-pos={$list.pos}>
+<div
+  class="MainRender"
+  style={`transform: scale(${zoom});`}
+  data-pos={$list.pos}
+>
   <img src={$image.url} alt="" class="MainRender__photo" />
 
   <ol class="MainRender__labels">
-    {#each $numberingItems as item, index}
+    {#each $render_.labels as item, index}
       <li
         class="MainRender__draggable-label"
         style={`transform: translate(
@@ -60,7 +70,7 @@
     class:MainRender__list--overlay={$list.overlay}
     data-pos={$list.pos}
   >
-    {#each $numberingItems as item, index}
+    {#each $render_.labels as item, index}
       <li>
         <i class="MainRender__item-number">{index + 1}</i>
         <span class="MainRender__item-text">{item}</span>

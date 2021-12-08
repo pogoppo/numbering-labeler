@@ -1,6 +1,10 @@
 <script lang="ts">
-  import { image } from "~/stores/render-options";
+  import { _ } from "svelte-i18n";
+
+  import { image, render_ } from "~/stores/render-options";
+
   let file: FileList;
+
   const readFile = (event: any) => {
     const reader = new FileReader();
     const imageFile = event.target.files[0];
@@ -8,9 +12,13 @@
     reader.onload = () => {
       const img = new Image();
       img.onload = () => {
-        $image.width = img.width;
-        $image.height = img.height;
-        $image.url = reader.result as string;
+        image.set({
+          width: img.width,
+          height: img.height,
+          url: reader.result as string,
+        });
+        $render_.labels = [];
+        $render_.zoom = 1;
       };
       img.src = reader.result as string;
     };
@@ -25,7 +33,7 @@
       on:change={readFile}
       style="display: none !important;"
     />
-    画像を開く
+    {$_("image.file")}
   </label>
 </div>
 
@@ -40,9 +48,10 @@
     padding: 32px;
   }
   .StartUp__file-select-button {
-    padding: 8px 24px;
+    padding: 16px 48px;
     background-color: var(--color-blue);
     border-radius: 4px;
+    font-size: 1.2rem;
     cursor: pointer;
   }
 </style>
