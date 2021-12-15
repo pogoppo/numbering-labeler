@@ -12,11 +12,13 @@
   import RenderOptionControl from "~/components/RenderOptionControl.svelte";
   import DownloadRender from "~/components/DownloadRender.svelte";
 
+  // i18nの設定 //
   addMessages("ja", JA);
   init({
     fallbackLocale: "ja",
     initialLocale: getLocaleFromNavigator(),
   });
+  ///////////////
 
   const toHEX = (n: number) =>
     Math.round(n * 2.55)

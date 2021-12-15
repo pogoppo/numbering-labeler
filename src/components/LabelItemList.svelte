@@ -1,10 +1,13 @@
 <script lang="ts">
-  import { tick } from "svelte";
+  import { onMount, tick } from "svelte";
   import { _ } from "svelte-i18n";
+  import Sortable from "sortablejs";
   import SvgIcon from "@jamescoyle/svelte-icon";
-  import { mdiTrashCanOutline } from "@mdi/js";
+  import { mdiTrashCanOutline, mdiPlus, mdiDragVerticalVariant } from "@mdi/js";
 
   import { render_ } from "~/stores/render-options";
+
+  let labelListElement: HTMLElement;
 
   function addItem(input: HTMLInputElement) {
     if (input.value === "") {
@@ -26,16 +29,34 @@
   };
 
   $: {
+    // ラベルに変更があった際にScrollBoosterの領域を再計算 //
     $render_.labels;
     (async () => {
       await tick();
       $render_.sbInstance?.updateMetrics();
     })();
+    /////////////////////////////////////////////////////
   }
+
+  onMount(() => {
+    Sortable.create(labelListElement, {
+      handle: ".LabelItemList__item-icon--drag",
+      async onEnd(event) {
+        const newList = [...$render_.labels];
+        newList.splice(event.oldIndex, 1);
+        newList.splice(event.newIndex, 0, $render_.labels[event.oldIndex]);
+        // SortableJSによるDOMの入れ替えを無理やり無効化 //
+        $render_.labels = [];
+        await tick();
+        $render_.labels = newList;
+        ////////////////////////////////////////////////
+      },
+    });
+  });
 </script>
 
-<ol class="LabelItemList">
-  <li class="LabelItemList__new-item">
+<div class="LabelItemList">
+  <div class="LabelItemList__item">
     <input
       type="text"
       placeholder={$_("label.new")}
@@ -48,63 +69,87 @@
         }
       }}
     />
-  </li>
+    <i class="LabelItemList__item-icon">
+      <SvgIcon type="mdi" path={mdiPlus} style="cursor: pointer;" />
+    </i>
+  </div>
 
-  {#each $render_.labels as item, index}
-    <li class="LabelItemList__item">
-      <span class="LabelItemList__item-number">{index + 1}</span>
-      <input
-        type="text"
-        bind:value={item}
-        on:blur={() => changeItem(index)}
-        on:keypress={(event) => {
-          if (event.key == "Enter") {
-            changeItem(index);
-          }
-        }}
-      />
-      <i class="LabelItemList__item-delete" on:click={() => removeItem(index)}>
-        <SvgIcon type="mdi" path={mdiTrashCanOutline} />
-      </i>
-    </li>
-  {/each}
-</ol>
+  <ol class="LabelItemList__labels" bind:this={labelListElement}>
+    {#each $render_.labels as item, index}
+      <li class="LabelItemList__item" data-index={index}>
+        <i
+          class="LabelItemList__item-icon LabelItemList__item-icon--drag"
+          on:click={() => removeItem(index)}
+        >
+          <SvgIcon
+            type="mdi"
+            path={mdiDragVerticalVariant}
+            style="cursor: move;"
+          />
+        </i>
+        <span class="LabelItemList__item-number">{index + 1}</span>
+        <input
+          type="text"
+          bind:value={item}
+          on:blur={() => changeItem(index)}
+          on:keypress={(event) => {
+            if (event.key == "Enter") {
+              changeItem(index);
+            }
+          }}
+        />
+        <i class="LabelItemList__item-icon" on:click={() => removeItem(index)}>
+          <SvgIcon
+            type="mdi"
+            path={mdiTrashCanOutline}
+            style="cursor: pointer;"
+          />
+        </i>
+      </li>
+    {/each}
+  </ol>
+</div>
 
 <style lang="scss">
   .LabelItemList {
+    padding: 4px;
+  }
+  .LabelItemList__labels {
     list-style: none;
     margin: 0;
-    padding: 4px;
+    padding: 0;
     overflow-y: auto;
-    > li {
-      padding: 4px 8px;
-      input[type="text"] {
-        width: 100%;
-        padding: 8px 16px;
-        background-color: rgba(255, 255, 255, 0.1);
-        color: #fff;
-        box-sizing: border-box;
-        &::placeholder {
-          color: rgba(255, 255, 255, 0.75);
-          font-size: 0.8rem;
-        }
-      }
-    }
   }
   .LabelItemList__item {
     display: flex;
     align-items: center;
+    padding: 4px 8px;
+    input[type="text"] {
+      width: 100%;
+      padding: 8px 16px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      box-sizing: border-box;
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 0.8rem;
+      }
+    }
   }
   .LabelItemList__item-number {
     display: block;
     padding: 8px;
     background-color: rgba(255, 255, 255, 0.2);
   }
-  .LabelItemList__item-delete {
+  .LabelItemList__item-icon {
     display: flex;
     align-items: center;
     padding: 8px;
     background-color: rgba(255, 255, 255, 0.1);
-    cursor: pointer;
+    &--drag {
+      padding: 8px 2px;
+      background-color: transparent;
+      opacity: 0.5;
+    }
   }
 </style>

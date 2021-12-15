@@ -25,12 +25,14 @@
           height: img.height,
           url: reader.result as string,
         });
+        // 初期化処理 //
         $render_.labels = [];
         $render_.zoom = zoom;
         $render_.sbInstance.setPosition({
           x: (img.width - img.width * widthRate) / 2,
           y: (img.height - img.height * heightRate) / 2,
         });
+        ///////////////
       };
 
       img.src = reader.result as string;

@@ -35,6 +35,7 @@
     "sass": "^1.43.4",
     "scrollbooster": "^3.0.2",
     "sirv-cli": "^1.0.0",
+    "sortablejs": "^1.14.0",
     "svelte-i18n": "^3.3.13"
   }
 }

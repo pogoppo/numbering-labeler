@@ -4,12 +4,14 @@
   import { list, label as label_, render_ } from "~/stores/render-options";
 
   $: {
+    // リストに変更があった際にScrollBoosterの領域を再計算 //
     $list.pos;
     $list.overlay;
     (async () => {
       await tick();
       $render_.sbInstance?.updateMetrics();
     })();
+    /////////////////////////////////////////////////////
   }
 </script>
 
