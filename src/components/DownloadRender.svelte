@@ -25,14 +25,16 @@
   };
 </script>
 
-<button class="DownloadRender" on:click={download} disabled={true}>
+<button class="DownloadRender" on:click={download}>
   {$_("image.download")}
 </button>
 
 <style lang="scss">
   .DownloadRender {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    padding: 16px 24px;
     background-color: var(--color-orange);
     color: #fff;
     font-size: 1.2rem;

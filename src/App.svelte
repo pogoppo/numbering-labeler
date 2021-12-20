@@ -1,16 +1,22 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getLocaleFromNavigator, init, addMessages } from "svelte-i18n";
+  import { getLocaleFromNavigator, init, addMessages, _ } from "svelte-i18n";
   import ScrollBooster from "scrollbooster";
 
   import JA from "~/locales/ja.json";
-  import { image, list, label, render_ } from "~/stores/render-options";
+  import {
+    image,
+    list,
+    label as label_,
+    render_,
+  } from "~/stores/render-options";
 
   import MainRender from "~/components/MainRender.svelte";
   import StartUp from "~/components/StartUp.svelte";
   import LabelItemList from "~/components/LabelItemList.svelte";
   import RenderOptionControl from "~/components/RenderOptionControl.svelte";
   import DownloadRender from "~/components/DownloadRender.svelte";
+  import OpenFileInput from "./components/OpenFileInput.svelte";
 
   // i18nの設定 //
   addMessages("ja", JA);
@@ -62,10 +68,10 @@
           --list-rgba={$list.color + toHEX($list.alpha)}
           --list-font-color={$list.fontColor}
           --list-font-size={`${$list.fontSize}px`}
-          --label-rgb={$label.color}
-          --label-rgba={$label.color + toHEX($label.alpha)}
-          --label-font-color={$label.fontColor}
-          --label-font-size={`${$label.fontSize}px`}
+          --label-rgb={$label_.color}
+          --label-rgba={$label_.color + toHEX($label_.alpha)}
+          --label-font-color={$label_.fontColor}
+          --label-font-size={`${$label_.fontSize}px`}
         />
       {:else}
         <StartUp />
@@ -76,6 +82,11 @@
   <div class="AppLayout__list" class:AppLayout__list--disabled={!!!$image.url}>
     <LabelItemList />
     <DownloadRender renderElement={$render_.render} />
+    <!-- svelte-ignore a11y-label-has-associated-control -->
+    <label class="AppLayout__open-file">
+      <OpenFileInput />
+      {$_("image.restart")}
+    </label>
   </div>
 </main>
 
@@ -89,43 +100,54 @@
     box-sizing: border-box;
     user-select: none;
   }
-  .AppLayout__workspace {
-    display: flex;
-    overflow: auto;
-    scrollbar-color: rgba(255, 255, 255, 0.2);
-    scrollbar-width: thin;
-    &::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+  .AppLayout {
+    &__workspace {
+      display: flex;
+      overflow: auto;
+      scrollbar-color: rgba(255, 255, 255, 0.2);
+      scrollbar-width: thin;
+      &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+      }
+      &::-webkit-scrollbar-button,
+      &::-webkit-scrollbar-track,
+      &::-webkit-scrollbar-track-piece,
+      &::-webkit-scrollbar-corner,
+      &::-webkit-resizer {
+        display: none;
+      }
     }
-    &::-webkit-scrollbar-thumb {
-      background-color: rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
+    &__render {
+      width: max-content;
+      height: max-content;
+      margin: auto;
     }
-    &::-webkit-scrollbar-button,
-    &::-webkit-scrollbar-track,
-    &::-webkit-scrollbar-track-piece,
-    &::-webkit-scrollbar-corner,
-    &::-webkit-resizer {
-      display: none;
+    &__control,
+    &__list {
+      max-height: 100vh;
+      background-color: rgba(0, 0, 0, 0.1);
+      &--disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
     }
-  }
-  .AppLayout__render {
-    width: max-content;
-    height: max-content;
-    margin: auto;
-  }
-  .AppLayout__control,
-  .AppLayout__list {
-    max-height: 100vh;
-    background-color: rgba(0, 0, 0, 0.1);
-    &--disabled {
-      opacity: 0.5;
-      pointer-events: none;
+    &__list {
+      display: grid;
+      grid-template-rows: 1fr 48px 48px;
     }
-  }
-  .AppLayout__list {
-    display: grid;
-    grid-template-rows: 1fr 64px;
+    &__open-file {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      background-color: red;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
   }
 </style>

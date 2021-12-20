@@ -56,7 +56,7 @@
 </script>
 
 <div class="LabelItemList">
-  <div class="LabelItemList__item">
+  <div class="LabelItemList__item LabelItemList__item--new">
     <input
       type="text"
       placeholder={$_("label.new")}
@@ -113,43 +113,43 @@
 <style lang="scss">
   .LabelItemList {
     padding: 4px;
-  }
-  .LabelItemList__labels {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    overflow-y: auto;
-  }
-  .LabelItemList__item {
-    display: flex;
-    align-items: center;
-    padding: 4px 8px;
-    input[type="text"] {
-      width: 100%;
-      padding: 8px 16px;
-      background-color: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      box-sizing: border-box;
-      &::placeholder {
-        color: rgba(255, 255, 255, 0.75);
-        font-size: 0.8rem;
+    &__labels {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      overflow-y: auto;
+    }
+    &__item {
+      display: flex;
+      align-items: center;
+      padding: 4px 8px;
+      input[type="text"] {
+        width: 100%;
+        padding: 8px 16px;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        box-sizing: border-box;
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.75);
+          font-size: 0.8rem;
+        }
       }
     }
-  }
-  .LabelItemList__item-number {
-    display: block;
-    padding: 8px;
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-  .LabelItemList__item-icon {
-    display: flex;
-    align-items: center;
-    padding: 8px;
-    background-color: rgba(255, 255, 255, 0.1);
-    &--drag {
-      padding: 8px 2px;
-      background-color: transparent;
-      opacity: 0.5;
+    &__item-number {
+      display: block;
+      padding: 8px;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    &__item-icon {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      background-color: rgba(255, 255, 255, 0.1);
+      &--drag {
+        padding: 8px 2px;
+        background-color: transparent;
+        opacity: 0.5;
+      }
     }
   }
 </style>
