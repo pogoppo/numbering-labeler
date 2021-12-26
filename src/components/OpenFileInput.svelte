@@ -1,7 +1,6 @@
 <script lang="ts">
   import { image, render_ } from "~/stores/render-options";
-
-  let file: FileList;
+  import labelList from "~/stores/label-list";
 
   const readFile = (event: any) => {
     const reader = new FileReader();
@@ -24,7 +23,7 @@
           url: reader.result as string,
         });
         // 初期化処理 //
-        $render_.labels = [];
+        $labelList = [];
         $render_.zoom = zoom;
         $render_.sbInstance.setPosition({
           x: (img.width - img.width * widthRate) / 2,
@@ -40,7 +39,7 @@
 
 <input
   type="file"
-  bind:files={file}
   on:change={readFile}
   style="display: none !important;"
+  accept="image/jpeg,image/png"
 />

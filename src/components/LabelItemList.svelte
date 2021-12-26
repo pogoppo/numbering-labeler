@@ -6,6 +6,7 @@
   import { mdiTrashCanOutline, mdiPlus, mdiDragVerticalVariant } from "@mdi/js";
 
   import { render_ } from "~/stores/render-options";
+  import labelList from "~/stores/label-list";
 
   let labelListElement: HTMLElement;
 
@@ -13,24 +14,23 @@
     if (input.value === "") {
       return;
     }
-    $render_.labels = [...$render_.labels, input.value];
+    labelList.add(input.value);
     input.value = "";
   }
 
   const changeItem = (index: number) => {
-    if ($render_.labels[index] === "") {
-      removeItem(index);
+    if ($labelList[index].text === "") {
+      labelList.remove(index);
     }
   };
 
   const removeItem = (index: number) => {
-    $render_.labels.splice(index, 1);
-    $render_.labels = [...$render_.labels];
+    labelList.remove(index);
   };
 
   $: {
+    $labelList;
     // ラベルに変更があった際にScrollBoosterの領域を再計算 //
-    $render_.labels;
     (async () => {
       await tick();
       $render_.sbInstance?.updateMetrics();
@@ -42,13 +42,13 @@
     Sortable.create(labelListElement, {
       handle: ".LabelItemList__item-icon--drag",
       async onEnd(event) {
-        const newList = [...$render_.labels];
+        const newList = [...$labelList];
         newList.splice(event.oldIndex, 1);
-        newList.splice(event.newIndex, 0, $render_.labels[event.oldIndex]);
+        newList.splice(event.newIndex, 0, $labelList[event.oldIndex]);
         // SortableJSによるDOMの入れ替えを無理やり無効化 //
-        $render_.labels = [];
+        $labelList = [];
         await tick();
-        $render_.labels = newList;
+        $labelList = newList;
         ////////////////////////////////////////////////
       },
     });
@@ -75,12 +75,9 @@
   </div>
 
   <ol class="LabelItemList__labels" bind:this={labelListElement}>
-    {#each $render_.labels as item, index}
+    {#each $labelList as item, index}
       <li class="LabelItemList__item" data-index={index}>
-        <i
-          class="LabelItemList__item-icon LabelItemList__item-icon--drag"
-          on:click={() => removeItem(index)}
-        >
+        <i class="LabelItemList__item-icon LabelItemList__item-icon--drag">
           <SvgIcon
             type="mdi"
             path={mdiDragVerticalVariant}
@@ -90,7 +87,7 @@
         <span class="LabelItemList__item-number">{index + 1}</span>
         <input
           type="text"
-          bind:value={item}
+          bind:value={item.text}
           on:blur={() => changeItem(index)}
           on:keypress={(event) => {
             if (event.key == "Enter") {

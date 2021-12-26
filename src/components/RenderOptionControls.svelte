@@ -1,5 +1,7 @@
 <script lang="ts">
   import { tick } from "svelte";
+  import SvgIcon from "@jamescoyle/svelte-icon";
+  import { mdiViewList, mdiLabel } from "@mdi/js";
 
   import { list, label as label_, render_ } from "~/stores/render-options";
 
@@ -16,7 +18,10 @@
 </script>
 
 <div class="RenderOptionControl">
-  <h3>リスト</h3>
+  <h3>
+    <SvgIcon type="mdi" path={mdiViewList} />
+    リスト
+  </h3>
   <div class="RenderOptionControl__item">
     <h4>位置</h4>
     <div class="RenderOptionControl__switch">
@@ -77,7 +82,10 @@
     />
   </div>
 
-  <h3>ラベル</h3>
+  <h3>
+    <SvgIcon type="mdi" path={mdiLabel} />
+    ラベル
+  </h3>
   <div class="RenderOptionControl__item">
     <h4>背景色</h4>
     <label>
@@ -122,6 +130,9 @@
     padding: 16px;
     font-size: 0.9em;
     > h3 {
+      display: flex;
+      align-items: center;
+      gap: 4px;
       margin: 32px 0 0;
       padding-bottom: 8px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.25);

@@ -2,6 +2,7 @@
   import interact from "interactjs";
   import { onMount } from "svelte";
   import { image, list, render_ } from "~/stores/render-options";
+  import labelList from "~/stores/label-list";
 
   export let zoom = 1;
   export let labelSpan = 32;
@@ -11,6 +12,8 @@
   $: {
     maxLabelXPos = $image.width - labelSpan * 2;
   }
+
+  const defaultX = (index: number) => Math.min(maxLabelXPos, index * labelSpan);
 
   onMount(() => {
     interact(".MainRender [data-draggable]").draggable({
@@ -25,16 +28,14 @@
       listeners: {
         move(event) {
           const target = event.target;
-          const x =
-            (parseFloat(target.getAttribute("data-x")) || 0) +
-            event.dx * (1 / zoom);
-          const y =
-            (parseFloat(target.getAttribute("data-y")) || 0) +
-            event.dy * (1 / zoom);
+          const index = target.dataset.index;
+          const listItem = $labelList[index];
+          const x = (listItem.x ?? defaultX(index)) + event.dx * (1 / zoom);
+          const y = (listItem.y ?? 0) + event.dy * (1 / zoom);
 
           target.style.transform = "translate(" + x + "px, " + y + "px)";
-          target.setAttribute("data-x", x);
-          target.setAttribute("data-y", y);
+          listItem.x = x;
+          listItem.y = y;
         },
       },
     });
@@ -49,18 +50,18 @@
   <img src={$image.url} alt="" class="MainRender__photo" />
 
   <ol class="MainRender__labels">
-    {#each $render_.labels as item, index}
+    {#each $labelList as item, index}
       <li
         class="MainRender__draggable-label"
         style={`transform: translate(
-          ${Math.min(maxLabelXPos, index * labelSpan)}px, 0
+          ${item.x ?? defaultX(index)}px, ${item.y ?? 0}px
         );`}
-        data-x={Math.min(maxLabelXPos, index * labelSpan)}
+        data-index={index}
         data-no-scroll
         data-draggable
       >
         <i class="MainRender__item-number">{index + 1}</i>
-        <span class="MainRender__item-text">{item}</span>
+        <span class="MainRender__item-text">{item.text}</span>
       </li>
     {/each}
   </ol>
@@ -70,10 +71,10 @@
     class:MainRender__list--overlay={$list.overlay}
     data-pos={$list.pos}
   >
-    {#each $render_.labels as item, index}
+    {#each $labelList as item, index}
       <li>
         <i class="MainRender__item-number">{index + 1}</i>
-        <span class="MainRender__item-text">{item}</span>
+        <span class="MainRender__item-text">{item.text}</span>
       </li>
     {/each}
   </ol>
