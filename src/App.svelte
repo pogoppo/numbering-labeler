@@ -1,11 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getLocaleFromNavigator, init, addMessages, _ } from "svelte-i18n";
+  import { _ } from "svelte-i18n";
   import ScrollBooster from "scrollbooster";
   import SvgIcon from "@jamescoyle/svelte-icon";
   import { mdiAutorenew, mdiMagnifyPlusOutline } from "@mdi/js";
 
-  import JA from "~/locales/ja.json";
   import {
     image,
     list,
@@ -19,15 +18,8 @@
   import LabelItemList from "~/components/LabelItemList.svelte";
   import RenderOptionControl from "~/components/RenderOptionControls.svelte";
   import DownloadRender from "~/components/DownloadRenderButton.svelte";
-  import OpenFileInput from "./components/OpenFileInput.svelte";
 
-  // i18nの設定 //
-  addMessages("ja", JA);
-  init({
-    fallbackLocale: "ja",
-    initialLocale: getLocaleFromNavigator(),
-  });
-  ///////////////
+  import { readFile } from "~/utils/load-image";
 
   const toHEX = (n: number) =>
     Math.round(n * 2.55)
@@ -95,7 +87,12 @@
     <DownloadRender renderElement={$render_.render} />
     <!-- svelte-ignore a11y-label-has-associated-control -->
     <label class="AppLayout__open-file">
-      <OpenFileInput />
+      <input
+        type="file"
+        on:change={readFile}
+        style="display: none !important;"
+        accept="image/jpeg,image/png"
+      />
       <SvgIcon type="mdi" path={mdiAutorenew} />
       {$_("image.restart")}
     </label>

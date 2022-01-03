@@ -1,11 +1,11 @@
 <script lang="ts">
-  import downloadjs from "downloadjs";
-  import { toJpeg } from "html-to-image";
   import { _ } from "svelte-i18n";
   import SvgIcon from "@jamescoyle/svelte-icon";
   import { mdiDownload } from "@mdi/js";
 
   import { render_ } from "~/stores/render-options";
+
+  import { downloadElementImage } from "~/utils/download-element-image";
 
   export let renderElement: HTMLElement;
 
@@ -16,14 +16,7 @@
 
     $render_.zoom = 1;
 
-    const options = {
-      width: renderElement.clientWidth,
-      height: renderElement.clientHeight,
-      style: { margin: "0" },
-    };
-    toJpeg(renderElement, options).then((dataUrl) => {
-      downloadjs(dataUrl, "labeled-image.jpg");
-    });
+    downloadElementImage(renderElement);
   };
 </script>
 

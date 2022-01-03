@@ -39,7 +39,7 @@
   }
 
   onMount(() => {
-    Sortable.create(labelListElement, {
+    Sortable?.create(labelListElement, {
       handle: ".LabelItemList__item-icon--drag",
       async onEnd(event) {
         const newList = [...$labelList];
@@ -69,7 +69,7 @@
         }
       }}
     />
-    <i class="LabelItemList__item-icon">
+    <i class="LabelItemList__item-icon LabelItemList__item-icon--add">
       <SvgIcon type="mdi" path={mdiPlus} style="cursor: pointer;" />
     </i>
   </div>
@@ -95,7 +95,10 @@
             }
           }}
         />
-        <i class="LabelItemList__item-icon" on:click={() => removeItem(index)}>
+        <i
+          class="LabelItemList__item-icon LabelItemList__item-icon--remove"
+          on:click={() => removeItem(index)}
+        >
           <SvgIcon
             type="mdi"
             path={mdiTrashCanOutline}

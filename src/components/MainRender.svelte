@@ -1,13 +1,14 @@
 <script lang="ts">
   import interact from "interactjs";
   import { onMount } from "svelte";
-  import { image, list, render_ } from "~/stores/render-options";
+
+  import { image, list } from "~/stores/render-options";
   import labelList from "~/stores/label-list";
 
   export let zoom = 1;
   export let labelSpan = 32;
 
-  let maxLabelXPos: number;
+  let maxLabelXPos: number = 0;
 
   $: {
     maxLabelXPos = $image.width - labelSpan * 2;

@@ -1,13 +1,17 @@
 <script lang="ts">
   import { _ } from "svelte-i18n";
-
-  import OpenFileInput from "~/components/OpenFileInput.svelte";
+  import { readFile } from "~/utils/load-image";
 </script>
 
 <div class="StartUp">
   <!-- svelte-ignore a11y-label-has-associated-control -->
   <label class="StartUp__open-file-button">
-    <OpenFileInput />
+    <input
+      type="file"
+      on:change={readFile}
+      style="display: none !important;"
+      accept="image/jpeg,image/png"
+    />
     {$_("image.file")}
   </label>
 </div>
