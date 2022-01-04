@@ -2,7 +2,7 @@
   import interact from "interactjs";
   import { onMount } from "svelte";
 
-  import { image, list } from "~/stores/render-options";
+  import { image, list, render_ } from "~/stores/render-options";
   import labelList from "~/stores/label-list";
 
   export let zoom = 1;
@@ -27,6 +27,11 @@
       ],
       autoScroll: true,
       listeners: {
+        start() {
+          $render_.sbInstance.updateOptions({
+            lockScrollOnDragDirection: true,
+          });
+        },
         move(event) {
           const target = event.target;
           const index = target.dataset.index;
@@ -37,6 +42,11 @@
           target.style.transform = "translate(" + x + "px, " + y + "px)";
           listItem.x = x;
           listItem.y = y;
+        },
+        end() {
+          $render_.sbInstance.updateOptions({
+            lockScrollOnDragDirection: false,
+          });
         },
       },
     });
@@ -96,7 +106,6 @@
       height: var(--image-height);
     }
     &__labels {
-      counter-reset: numbering-label 0;
       list-style: none;
       position: absolute;
       top: 0;
@@ -111,10 +120,11 @@
       box-sizing: border-box;
       > li {
         position: absolute;
+        touch-action: none;
+        user-select: none;
       }
     }
     &__list {
-      counter-reset: numbering-label 0;
       list-style: none;
       margin: 0;
       padding: 16px;
@@ -147,8 +157,6 @@
       }
     }
     &__item-number {
-      content: counter(numbering-label);
-      counter-increment: numbering-label;
       display: inline-block;
       width: 1.2em;
       height: 1.2em;
@@ -163,11 +171,9 @@
       background-color: var(--label-rgba);
       padding: 2px;
       color: var(--label-font-color);
-      pointer-events: none;
     }
     &__labels &__item-text {
       display: none;
-      pointer-events: none;
     }
     &__list &__item-number {
       margin-right: 4px;

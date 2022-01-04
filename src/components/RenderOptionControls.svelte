@@ -18,107 +18,111 @@
 </script>
 
 <div class="RenderOptionControl">
-  <h3>
-    <SvgIcon type="mdi" path={mdiViewList} />
-    リスト
-  </h3>
-  <div class="RenderOptionControl__item">
-    <h4>位置</h4>
-    <div class="RenderOptionControl__switch">
-      <span
-        class:active={$list.pos == "bottom"}
-        on:click={() => ($list.pos = "bottom")}
-      >
-        下に配置
-      </span>
-      <span
-        class:active={$list.pos == "right"}
-        on:click={() => ($list.pos = "right")}
-      >
-        右に配置
-      </span>
-      <span
-        class:active={$list.overlay}
-        on:click={() => ($list.overlay = !$list.overlay)}
-      >
-        画像と重ねる
-      </span>
+  <div class="RenderOptionControl__section">
+    <h3>
+      <SvgIcon type="mdi" path={mdiViewList} />
+      リスト
+    </h3>
+    <div class="RenderOptionControl__item">
+      <h4>位置</h4>
+      <div class="RenderOptionControl__switch">
+        <span
+          class:active={$list.pos == "bottom"}
+          on:click={() => ($list.pos = "bottom")}
+        >
+          下に配置
+        </span>
+        <span
+          class:active={$list.pos == "right"}
+          on:click={() => ($list.pos = "right")}
+        >
+          右に配置
+        </span>
+        <span
+          class:active={$list.overlay}
+          on:click={() => ($list.overlay = !$list.overlay)}
+        >
+          画像と重ねる
+        </span>
+      </div>
+    </div>
+    <div class="RenderOptionControl__item">
+      <h4>背景色</h4>
+      <label>
+        <input type="color" bind:value={$list.color} />
+        <span class="RenderOptionControl__button">変更</span>
+      </label>
+    </div>
+    {#if $list.overlay}
+      <div class="RenderOptionControl__item">
+        <h4>背景色の透明度</h4>
+        <input
+          type="range"
+          bind:value={$list.alpha}
+          min="0"
+          max="100"
+          step="10"
+        />
+      </div>
+    {/if}
+    <div class="RenderOptionControl__item">
+      <h4>フォントの色</h4>
+      <label>
+        <input type="color" bind:value={$list.fontColor} />
+        <span class="RenderOptionControl__button">変更</span>
+      </label>
+    </div>
+    <div class="RenderOptionControl__item">
+      <h4>フォントサイズ</h4>
+      <input
+        type="range"
+        bind:value={$list.fontSize}
+        min={$list.maxFontSize / 10}
+        max={$list.maxFontSize}
+        step={$list.maxFontSize / 10}
+      />
     </div>
   </div>
-  <div class="RenderOptionControl__item">
-    <h4>背景色</h4>
-    <label>
-      <input type="color" bind:value={$list.color} />
-      <span class="RenderOptionControl__button">変更</span>
-    </label>
-  </div>
-  {#if $list.overlay}
+
+  <div class="RenderOptionControl__section">
+    <h3>
+      <SvgIcon type="mdi" path={mdiLabel} />
+      ラベル
+    </h3>
+    <div class="RenderOptionControl__item">
+      <h4>背景色</h4>
+      <label>
+        <input type="color" bind:value={$label_.color} />
+        <span class="RenderOptionControl__button">変更</span>
+      </label>
+    </div>
     <div class="RenderOptionControl__item">
       <h4>背景色の透明度</h4>
       <input
         type="range"
-        bind:value={$list.alpha}
+        bind:value={$label_.alpha}
         min="0"
         max="100"
         step="10"
       />
     </div>
-  {/if}
-  <div class="RenderOptionControl__item">
-    <h4>フォントの色</h4>
-    <label>
-      <input type="color" bind:value={$list.fontColor} />
-      <span class="RenderOptionControl__button">変更</span>
-    </label>
-  </div>
-  <div class="RenderOptionControl__item">
-    <h4>フォントサイズ</h4>
-    <input
-      type="range"
-      bind:value={$list.fontSize}
-      min="10"
-      max="24"
-      step="1"
-    />
-  </div>
-
-  <h3>
-    <SvgIcon type="mdi" path={mdiLabel} />
-    ラベル
-  </h3>
-  <div class="RenderOptionControl__item">
-    <h4>背景色</h4>
-    <label>
-      <input type="color" bind:value={$label_.color} />
-      <span class="RenderOptionControl__button">変更</span>
-    </label>
-  </div>
-  <div class="RenderOptionControl__item">
-    <h4>背景色の透明度</h4>
-    <input
-      type="range"
-      bind:value={$label_.alpha}
-      min="0"
-      max="100"
-      step="10"
-    />
-  </div>
-  <div class="RenderOptionControl__item">
-    <h4>フォントの色</h4>
-    <label>
-      <input type="color" bind:value={$label_.fontColor} />
-      <span class="RenderOptionControl__button">変更</span>
-    </label>
-  </div>
-  <div class="RenderOptionControl__item">
-    <h4>フォントサイズ</h4>
-    <input
-      type="range"
-      bind:value={$label_.fontSize}
-      min="16"
-      max="48"
-      step="2"
-    />
+    <div class="RenderOptionControl__item">
+      <h4>フォントの色</h4>
+      <label>
+        <input type="color" bind:value={$label_.fontColor} />
+        <span class="RenderOptionControl__button">変更</span>
+      </label>
+    </div>
+    <div class="RenderOptionControl__item">
+      <h4>フォントサイズ</h4>
+      <input
+        type="range"
+        bind:value={$label_.fontSize}
+        min={$label_.maxFontSize / 10}
+        max={$label_.maxFontSize}
+        step={$label_.maxFontSize / 10}
+      />
+    </div>
   </div>
 </div>
 
@@ -126,16 +130,21 @@
   .RenderOptionControl {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 32px;
     padding: 16px;
     font-size: 0.9em;
-    > h3 {
+    &__section {
       display: flex;
-      align-items: center;
-      gap: 4px;
-      margin: 32px 0 0;
-      padding-bottom: 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+      flex-direction: column;
+      gap: 16px;
+      > h3 {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin: 0;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+      }
     }
     &__item {
       display: flex;

@@ -1,4 +1,4 @@
-import { image, render_ } from "~/stores/render-options";
+import { image, label, list, render_ } from "~/stores/render-options";
 import labelList from "~/stores/label-list";
 import { get } from "svelte/store";
 
@@ -37,6 +37,25 @@ export const readFile = (event: any) => {
 
       // 初期化処理 //
       labelList.set([]);
+
+      const labelFontSize = get(label).fontSize * (1 / zoom);
+      label.set(Object.assign(
+        get(label),
+        {
+          fontSize: labelFontSize,
+          maxFontSize: labelFontSize * 2
+        }
+      ));
+
+      const listFontSize = get(list).fontSize * (1 / zoom);
+      list.set(Object.assign(
+        get(list),
+        {
+          fontSize: listFontSize,
+          maxFontSize: listFontSize * 2
+        }
+      ));
+
       render_.set(Object.assign(get(render_), { zoom }));
       get(render_).sbInstance.setPosition({
         x: (imageSize.width - imageSize.width * widthRate) / 2,

@@ -14,6 +14,7 @@ export const list = writable({
   alpha: 100,
   fontColor: "#ffffff",
   fontSize: 16,
+  maxFontSize: 48
 });
 
 export const label = writable({
@@ -21,6 +22,7 @@ export const label = writable({
   alpha: 100,
   fontColor: "#ffffff",
   fontSize: 24,
+  maxFontSize: 64
 });
 
 export const render_ = writable({
