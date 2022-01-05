@@ -7,6 +7,25 @@
   font-family: sans-serif;
   color: #fff;
 }
+* {
+  scrollbar-color: rgba(255, 255, 255, 0.2);
+  scrollbar-width: thin;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+*::-webkit-scrollbar-button,
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track-piece,
+*::-webkit-scrollbar-corner,
+*::-webkit-resizer {
+  display: none;
+}
 body {
   margin: 0;
   background-color: var(--color-dark-blue);
