@@ -1,14 +1,14 @@
 <script lang="ts">
   import labelList from "~/stores/label-list";
 
-  import RenderOptionControl from "~/components/RenderOptionControls.svelte";
+  import RenderControls from "~/components/RenderControls.svelte";
 </script>
 
 <div
   class="AppLayoutRenderControls"
   class:AppLayoutRenderControls--disabled={!!!$labelList.length}
 >
-  <RenderOptionControl />
+  <RenderControls />
 </div>
 
 <style lang="scss">

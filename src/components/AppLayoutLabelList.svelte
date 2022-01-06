@@ -1,6 +1,5 @@
 <script lang="ts">
   import { image, render_ } from "~/stores/render-options";
-  import labelList from "~/stores/label-list";
 
   import LabelItemList from "~/components/LabelItemList.svelte";
   import DownloadRenderButton from "~/components/DownloadRenderButton.svelte";
@@ -12,10 +11,8 @@
   class:AppLayoutLabelList--disabled={!!!$image.url}
 >
   <LabelItemList />
-  {#if $labelList.length}
-    <DownloadRenderButton renderElement={$render_.render} />
-  {/if}
   {#if $image.url}
+    <DownloadRenderButton renderElement={$render_.render} />
     <RestartButton />
   {/if}
 </div>

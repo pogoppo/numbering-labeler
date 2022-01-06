@@ -1,6 +1,8 @@
+import { get } from "svelte/store";
+import { _ } from "svelte-i18n";
+
 import { image, label, list, render_ } from "~/stores/render-options";
 import labelList from "~/stores/label-list";
-import { get } from "svelte/store";
 
 const getImageSize = async (dataURL: string): Promise<{ width: number, height: number }> => {
   return new Promise((resolve) => {
@@ -37,6 +39,7 @@ export const readFile = (event: any) => {
 
       // 初期化処理 //
       labelList.set([]);
+      labelList.add(get(_)('label.sample'));
 
       const labelFontSize = get(label).fontSize * (1 / zoom);
       label.set(Object.assign(

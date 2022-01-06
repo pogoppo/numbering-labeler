@@ -40,6 +40,7 @@
       {/if}
     </div>
   </div>
+
   {#if $image.url}
     <div class="AppLayoutWorkspace__zoom-control">
       <div class="AppLayoutWorkspace__zoom-range">

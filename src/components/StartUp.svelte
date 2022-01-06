@@ -7,19 +7,19 @@
   <div class="StartUp__guide">
     <div class="StartUp__guide-section">
       <h2>Step 1</h2>
-      <p>画像を開く</p>
+      <p>{$_("guide.step1")}</p>
     </div>
     <div class="StartUp__guide-section">
       <h2>Step 2</h2>
-      <p>ラベル名を入力してラベルを追加する</p>
+      <p>{$_("guide.step2")}</p>
     </div>
     <div class="StartUp__guide-section">
       <h2>Step 3</h2>
-      <p>画像上のラベル番号、ラベル一覧を調整する</p>
+      <p>{$_("guide.step3")}</p>
     </div>
     <div class="StartUp__guide-section">
       <h2>Step 4</h2>
-      <p>画像をダウンロードして完了</p>
+      <p>{$_("guide.step4")}</p>
     </div>
   </div>
 
@@ -30,7 +30,7 @@
       style="display: none !important;"
       accept="image/jpeg,image/png"
     />
-    {$_("image.file")}
+    {$_("guide.start")}
   </label>
 </div>
 

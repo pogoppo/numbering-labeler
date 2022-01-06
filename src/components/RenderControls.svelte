@@ -4,6 +4,7 @@
   import { mdiViewList, mdiLabel } from "@mdi/js";
 
   import { list, label as label_, render_ } from "~/stores/render-options";
+  import { _ } from "svelte-i18n";
 
   $: {
     // リストに変更があった際にScrollBoosterの領域を再計算 //
@@ -17,45 +18,47 @@
   }
 </script>
 
-<div class="RenderOptionControl">
-  <div class="RenderOptionControl__section">
+<div class="RenderControls">
+  <div class="RenderControls__section">
     <h3>
       <SvgIcon type="mdi" path={mdiViewList} />
-      リスト
+      {$_("control.heading.list")}
     </h3>
-    <div class="RenderOptionControl__item">
-      <h4>位置</h4>
-      <div class="RenderOptionControl__switch">
+    <div class="RenderControls__item">
+      <h4>{$_("control.heading.position")}</h4>
+      <div class="RenderControls__switch">
         <span
           class:active={$list.pos == "bottom"}
           on:click={() => ($list.pos = "bottom")}
         >
-          下に配置
+          {$_("control.position.bottom")}
         </span>
         <span
           class:active={$list.pos == "right"}
           on:click={() => ($list.pos = "right")}
         >
-          右に配置
+          {$_("control.position.right")}
         </span>
         <span
           class:active={$list.overlay}
           on:click={() => ($list.overlay = !$list.overlay)}
         >
-          画像と重ねる
+          {$_("control.position.stack")}
         </span>
       </div>
     </div>
-    <div class="RenderOptionControl__item">
-      <h4>背景色</h4>
+    <div class="RenderControls__item">
+      <h4>{$_("control.heading.background-color")}</h4>
       <label>
         <input type="color" bind:value={$list.color} />
-        <span class="RenderOptionControl__button">変更</span>
+        <span class="RenderControls__button">
+          {$_("control.change")}
+        </span>
       </label>
     </div>
     {#if $list.overlay}
-      <div class="RenderOptionControl__item">
-        <h4>背景色の透明度</h4>
+      <div class="RenderControls__item">
+        <h4>{$_("control.heading.background-opacity")}</h4>
         <input
           type="range"
           bind:value={$list.alpha}
@@ -65,15 +68,17 @@
         />
       </div>
     {/if}
-    <div class="RenderOptionControl__item">
-      <h4>フォントの色</h4>
+    <div class="RenderControls__item">
+      <h4>{$_("control.heading.font-color")}</h4>
       <label>
         <input type="color" bind:value={$list.fontColor} />
-        <span class="RenderOptionControl__button">変更</span>
+        <span class="RenderControls__button">
+          {$_("control.change")}
+        </span>
       </label>
     </div>
-    <div class="RenderOptionControl__item">
-      <h4>フォントサイズ</h4>
+    <div class="RenderControls__item">
+      <h4>{$_("control.heading.font-size")}</h4>
       <input
         type="range"
         bind:value={$list.fontSize}
@@ -84,20 +89,22 @@
     </div>
   </div>
 
-  <div class="RenderOptionControl__section">
+  <div class="RenderControls__section">
     <h3>
       <SvgIcon type="mdi" path={mdiLabel} />
-      ラベル
+      {$_("control.heading.label")}
     </h3>
-    <div class="RenderOptionControl__item">
-      <h4>背景色</h4>
+    <div class="RenderControls__item">
+      <h4>{$_("control.heading.background-color")}</h4>
       <label>
         <input type="color" bind:value={$label_.color} />
-        <span class="RenderOptionControl__button">変更</span>
+        <span class="RenderControls__button">
+          {$_("control.change")}
+        </span>
       </label>
     </div>
-    <div class="RenderOptionControl__item">
-      <h4>背景色の透明度</h4>
+    <div class="RenderControls__item">
+      <h4>{$_("control.heading.background-opacity")}</h4>
       <input
         type="range"
         bind:value={$label_.alpha}
@@ -106,15 +113,17 @@
         step="10"
       />
     </div>
-    <div class="RenderOptionControl__item">
-      <h4>フォントの色</h4>
+    <div class="RenderControls__item">
+      <h4>{$_("control.heading.font-color")}</h4>
       <label>
         <input type="color" bind:value={$label_.fontColor} />
-        <span class="RenderOptionControl__button">変更</span>
+        <span class="RenderControls__button">
+          {$_("control.change")}
+        </span>
       </label>
     </div>
-    <div class="RenderOptionControl__item">
-      <h4>フォントサイズ</h4>
+    <div class="RenderControls__item">
+      <h4>{$_("control.heading.font-size")}</h4>
       <input
         type="range"
         bind:value={$label_.fontSize}
@@ -127,7 +136,7 @@
 </div>
 
 <style lang="scss">
-  .RenderOptionControl {
+  .RenderControls {
     display: flex;
     flex-direction: column;
     gap: 32px;

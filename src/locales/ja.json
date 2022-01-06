@@ -1,10 +1,34 @@
 {
   "label": {
-    "new": "ラベル名を入力して追加"
+    "new": "ラベル名を入力して追加",
+    "sample": "サンプルラベル"
   },
   "image": {
-    "file": "画像を開いて開始する",
     "restart": "別の画像で作り直す",
     "download": "画像をダウンロード"
+  },
+  "control": {
+    "heading": {
+      "label": "ラベル",
+      "list": "リスト",
+      "position": "位置",
+      "background-color": "背景色",
+      "background-opacity": "背景色の透明度",
+      "font-color": "フォントの色",
+      "font-size": "フォントサイズ"
+    },
+    "position": {
+      "bottom": "下に配置",
+      "right": "右に配置",
+      "stack": "画像と重ねる"
+    },
+    "change": "変更"
+  },
+  "guide": {
+    "step1": "画像を開く",
+    "step2": "ラベル名を入力してラベルを追加する",
+    "step3": "画像上のラベル番号、ラベル一覧を調整する",
+    "step4": "画像をダウンロードして完了",
+    "start": "画像を開いて開始する"
   }
 }
