@@ -6,17 +6,13 @@ interface ListItem {
   y: number | null
 }
 
-const { subscribe, set, update } = writable([] as ListItem[]);
-
 export default {
-  subscribe,
-  set,
-  update,
+  ...writable([] as ListItem[]),
   add(text: string) {
-    update((list) => [...list, { text, x: null, y: null }]);
+    this.update((list) => [...list, { text, x: null, y: null }]);
   },
   remove(index: number) {
-    update((list) => {
+    this.update((list) => {
       list.splice(index, 1);
       return [...list];
     });

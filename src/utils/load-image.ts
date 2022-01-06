@@ -3,6 +3,7 @@ import { _ } from "svelte-i18n";
 
 import { image, label, list, render_ } from "~/stores/render-options";
 import labelList from "~/stores/label-list";
+import { tick } from "svelte";
 
 const getImageSize = async (dataURL: string): Promise<{ width: number, height: number }> => {
   return new Promise((resolve) => {
@@ -20,13 +21,13 @@ const getImageSize = async (dataURL: string): Promise<{ width: number, height: n
 export const readFile = (event: any) => {
   const reader = new FileReader();
   const imageFile = event.target.files[0];
-  const workspaceWidth = get(render_).workspace.clientWidth;
-  const workspaceHeight = get(render_).workspace.clientHeight;
 
   reader.readAsDataURL(imageFile);
   return new Promise((resolve) => {
     reader.onload = async () => {
       const imageSize = await getImageSize(reader.result as string);
+      const workspaceWidth = get(render_).workspace.clientWidth;
+      const workspaceHeight = get(render_).workspace.clientHeight;
       const widthRate = workspaceWidth / imageSize.width;
       const heightRate = workspaceHeight / imageSize.height;
       const zoom = Math.min(1, widthRate * 0.9, heightRate * 0.9);
@@ -39,9 +40,10 @@ export const readFile = (event: any) => {
 
       // 初期化処理 //
       labelList.set([]);
+      await tick();
       labelList.add(get(_)('label.sample'));
 
-      const labelFontSize = get(label).fontSize * (1 / zoom);
+      const labelFontSize = label.baseFontSize() * (1 / zoom);
       label.set(Object.assign(
         get(label),
         {
@@ -50,7 +52,7 @@ export const readFile = (event: any) => {
         }
       ));
 
-      const listFontSize = get(list).fontSize * (1 / zoom);
+      const listFontSize = list.baseFontSize() * (1 / zoom);
       list.set(Object.assign(
         get(list),
         {
