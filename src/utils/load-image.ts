@@ -22,20 +22,24 @@ export const readFile = (event: any) => {
   const reader = new FileReader();
   const imageFile = event.target.files[0];
 
-  reader.readAsDataURL(imageFile);
+  reader.readAsArrayBuffer(imageFile);
   return new Promise((resolve) => {
     reader.onload = async () => {
-      const imageSize = await getImageSize(reader.result as string);
+      const imageBlob = new Blob([reader.result], { type: imageFile.type });
+      const imageURL = URL.createObjectURL(imageBlob);
+      const imageSize = await getImageSize(imageURL);
       const workspaceWidth = get(render_).workspace.clientWidth;
       const workspaceHeight = get(render_).workspace.clientHeight;
       const widthRate = workspaceWidth / imageSize.width;
       const heightRate = workspaceHeight / imageSize.height;
       const zoom = Math.min(1, widthRate * 0.9, heightRate * 0.9);
 
+      URL.revokeObjectURL(get(image).url);
+
       image.set({
         width: imageSize.width,
         height: imageSize.height,
-        url: reader.result as string,
+        url: imageURL,
       });
 
       // 初期化処理 //
