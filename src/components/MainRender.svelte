@@ -72,7 +72,6 @@
         data-draggable
       >
         <i class="MainRender__item-number">{index + 1}</i>
-        <span class="MainRender__item-text">{item.text}</span>
       </li>
     {/each}
   </ol>
@@ -127,19 +126,24 @@
     &__list {
       list-style: none;
       margin: 0;
-      padding: 16px;
+      padding: 0.5em;
       background-color: var(--list-rgb);
       color: var(--list-font-color);
       font-size: var(--list-font-size);
       box-sizing: border-box;
       &[data-pos="right"] {
-        display: grid;
-        grid-template-rows: repeat(auto-fill, minmax(1.5em, 1fr));
-        grid-auto-flow: column;
-        gap: 1em;
         width: max-content;
         min-height: var(--image-height);
         max-height: var(--image-height);
+        writing-mode: vertical-lr;
+        > li {
+          display: inline-flex;
+          align-items: flex-start;
+          max-width: 12em;
+          padding: 0.5em;
+          writing-mode: horizontal-tb;
+          vertical-align: bottom;
+        }
       }
       &[data-pos="bottom"] {
         display: flex;
@@ -158,6 +162,7 @@
     }
     &__item-number {
       display: inline-block;
+      flex: 1 0 auto;
       width: 1.2em;
       height: 1.2em;
       border-radius: 100%;
@@ -171,9 +176,7 @@
       background-color: var(--label-rgba);
       padding: 2px;
       color: var(--label-font-color);
-    }
-    &__labels &__item-text {
-      display: none;
+      pointer-events: none;
     }
     &__list &__item-number {
       margin-right: 4px;
