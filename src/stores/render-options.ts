@@ -10,7 +10,7 @@ export const image = writable({
 export const list = {
   ...writable({
     pos: "bottom",
-    overlay: false,
+    overlay: true,
     color: "#000000",
     alpha: 100,
     fontColor: "#ffffff",

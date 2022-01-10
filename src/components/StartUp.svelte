@@ -54,14 +54,24 @@
       align-items: center;
       gap: 32px;
       > h2 {
+        min-width: fit-content;
         margin: 0;
         font-family: "Times New Roman", Times, serif;
-        font-size: 2em;
+        font-size: 1.5em;
         font-style: italic;
       }
       > p {
         margin: 0;
+        font-size: 0.9em;
         opacity: 0.9;
+      }
+      @include responsive(laptop) {
+        > h2 {
+          font-size: 2em;
+        }
+        > p {
+          font-size: 1em;
+        }
       }
     }
     &__open-file-button {

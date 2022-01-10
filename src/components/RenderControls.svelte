@@ -84,7 +84,7 @@
         bind:value={$list.fontSize}
         min={$list.maxFontSize / 10}
         max={$list.maxFontSize}
-        step={$list.maxFontSize / 10}
+        step={$list.maxFontSize / 20}
       />
     </div>
   </div>
@@ -129,7 +129,7 @@
         bind:value={$label_.fontSize}
         min={$label_.maxFontSize / 10}
         max={$label_.maxFontSize}
-        step={$label_.maxFontSize / 10}
+        step={$label_.maxFontSize / 20}
       />
     </div>
   </div>

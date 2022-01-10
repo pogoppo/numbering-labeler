@@ -2,11 +2,13 @@
   import { onMount } from "svelte";
   import ScrollBooster from "scrollbooster";
 
-  import { render_ } from "~/stores/render-options";
+  import { image, render_ } from "~/stores/render-options";
+  import labelList from "~/stores/label-list";
 
   import AppLayoutWorkSpace from "~/components/AppLayoutWorkSpace.svelte";
   import AppLayoutLabelList from "~/components/AppLayoutLabelList.svelte";
   import AppLayoutRenderControls from "~/components/AppLayoutRenderControls.svelte";
+  import MobileAccordion from "~/components/MobileAccordion.svelte";
 
   onMount(() => {
     $render_.sbInstance = new ScrollBooster({
@@ -23,8 +25,20 @@
 
 <main>
   <AppLayoutWorkSpace />
-  <AppLayoutLabelList />
-  <AppLayoutRenderControls />
+  <MobileAccordion
+    disabled={!!!$labelList.length}
+    expand={false}
+    title="ラベルの追加と画像のダウンロード"
+  >
+    <AppLayoutLabelList />
+  </MobileAccordion>
+  <MobileAccordion
+    disabled={!!!$image.url}
+    expand={false}
+    title="スタイルの編集"
+  >
+    <AppLayoutRenderControls />
+  </MobileAccordion>
 </main>
 
 <style lang="scss">
@@ -36,13 +50,19 @@
     @include responsive(mobile) {
       display: grid;
       grid-template-columns: 100vw;
-      grid-template-rows: 50vh 1fr 1fr;
+      grid-template-rows:
+        minmax(50vh, 1fr)
+        auto
+        auto;
       grid-template-areas: "workspace" "list" "control";
     }
     @include responsive(tablet) {
       display: grid;
       grid-template-columns: 100vw;
-      grid-template-rows: 50vh 1fr 1fr;
+      grid-template-rows:
+        minmax(50vh, 1fr)
+        auto
+        auto;
       grid-template-areas: "workspace" "list" "control";
     }
     @include responsive(laptop) {

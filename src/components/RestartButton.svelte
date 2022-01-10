@@ -24,6 +24,7 @@
     align-items: center;
     gap: 4px;
     width: 100%;
+    height: 48px;
     background-color: red;
     cursor: pointer;
     box-sizing: border-box;

@@ -18,6 +18,27 @@ const getImageSize = async (dataURL: string): Promise<{ width: number, height: n
   });
 }
 
+const restrictImageSize = (size: { width: number, height: number }): typeof size => {
+  let base = 0;
+
+  if (size.width > size.height) {
+    base = size.width;
+  } else {
+    base = size.height;
+  }
+
+  if (base > 1920) // 解像度1080p TODO: 非マジックナンバーにする
+  {
+    const rate = base / 1920;
+    return {
+      width: size.width / rate,
+      height: size.height / rate,
+    }
+  } else {
+    return size;
+  }
+}
+
 export const readFile = (event: any) => {
   const reader = new FileReader();
   const imageFile = event.target.files[0];
@@ -27,12 +48,7 @@ export const readFile = (event: any) => {
     reader.onload = async () => {
       const imageBlob = new Blob([reader.result], { type: imageFile.type });
       const imageURL = URL.createObjectURL(imageBlob);
-      const imageSize = await getImageSize(imageURL);
-      const workspaceWidth = get(render_).workspace.clientWidth;
-      const workspaceHeight = get(render_).workspace.clientHeight;
-      const widthRate = workspaceWidth / imageSize.width;
-      const heightRate = workspaceHeight / imageSize.height;
-      const zoom = Math.min(1, widthRate * 0.9, heightRate * 0.9);
+      const imageSize = restrictImageSize(await getImageSize(imageURL));
 
       URL.revokeObjectURL(get(image).url);
 
@@ -44,8 +60,14 @@ export const readFile = (event: any) => {
 
       // 初期化処理 //
       labelList.set([]);
-      await tick();
       labelList.add(get(_)('label.sample'));
+      await tick();
+
+      const workspaceWidth = get(render_).workspace.clientWidth;
+      const workspaceHeight = get(render_).workspace.clientHeight;
+      const widthRate = workspaceWidth / imageSize.width;
+      const heightRate = workspaceHeight / imageSize.height;
+      const zoom = Math.min(1, widthRate * 0.9, heightRate * 0.9);
 
       const labelFontSize = label.baseFontSize() * (1 / zoom);
       label.set(Object.assign(
@@ -66,9 +88,11 @@ export const readFile = (event: any) => {
       ));
 
       render_.set(Object.assign(get(render_), { zoom }));
+      await tick();
+
       get(render_).sbInstance.setPosition({
-        x: (imageSize.width - imageSize.width * widthRate) / 2,
-        y: (imageSize.height - imageSize.height * heightRate) / 2,
+        x: (imageSize.width - get(render_).workspace.clientWidth) / 2,
+        y: (imageSize.height - get(render_).workspace.clientHeight) / 2,
       });
       ///////////////
 

@@ -6,15 +6,6 @@
   import labelList from "~/stores/label-list";
 
   export let zoom = 1;
-  export let labelSpan = 32;
-
-  let maxLabelXPos: number = 0;
-
-  $: {
-    maxLabelXPos = $image.width - labelSpan * 2;
-  }
-
-  const defaultX = (index: number) => Math.min(maxLabelXPos, index * labelSpan);
 
   onMount(() => {
     interact(".MainRender [data-draggable]").draggable({
@@ -36,8 +27,8 @@
           const target = event.target;
           const index = target.dataset.index;
           const listItem = $labelList[index];
-          const x = (listItem.x ?? defaultX(index)) + event.dx * (1 / zoom);
-          const y = (listItem.y ?? 0) + event.dy * (1 / zoom);
+          const x = listItem.x + event.dx * (1 / zoom);
+          const y = listItem.y + event.dy * (1 / zoom);
 
           target.style.transform = "translate(" + x + "px, " + y + "px)";
           listItem.x = x;
@@ -65,7 +56,7 @@
       <li
         class="MainRender__draggable-label"
         style={`transform: translate(
-          ${item.x ?? defaultX(index)}px, ${item.y ?? 0}px
+          ${item.x}px, ${item.y}px
         );`}
         data-index={index}
         data-no-scroll
