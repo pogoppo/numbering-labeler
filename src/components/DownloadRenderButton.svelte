@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tick } from "svelte";
   import { _ } from "svelte-i18n";
   import SvgIcon from "@jamescoyle/svelte-icon";
   import { mdiDownload } from "@mdi/js";
@@ -9,14 +10,19 @@
 
   export let renderElement: HTMLElement;
 
-  const download = () => {
+  const download = async () => {
     if (!renderElement) {
       return;
     }
 
+    const zoomSnapshot = $render_.zoom;
     $render_.zoom = 1;
+    await tick();
 
     downloadElementImage(renderElement);
+
+    $render_.zoom = zoomSnapshot;
+    await tick();
   };
 </script>
 
