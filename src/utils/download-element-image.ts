@@ -1,16 +1,16 @@
 import downloadjs from "downloadjs";
-import { toJpeg } from "html-to-image";
+import html2canvas from "html2canvas";
 
-export const elementToJpeg = (target: HTMLElement) => {
-  const options = {
-    width: target.clientWidth,
-    height: target.clientHeight,
-    style: { margin: "0" },
-  };
-  return toJpeg(target, options);
+export const elementToJpeg = async (target: HTMLElement): Promise<Blob> => {
+  const canvas = await html2canvas(target);
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => {
+      resolve(blob);
+    }, "image/jpeg", 1);
+  });
 }
 
 export const downloadElementImage = async (target: HTMLElement) => {
-  const dataURL = await elementToJpeg(target);
-  downloadjs(dataURL, "labeled-image.jpg");
+  const jpeg = await elementToJpeg(target);
+  downloadjs(jpeg, "labeled-image.jpg");
 };
