@@ -15,7 +15,8 @@
       viewport: $render_.workspace,
       scrollMode: "native",
       lockScrollOnDragDirection: false,
-      bounce: true,
+      bounce: false,
+      pointerMode: "mouse",
       shouldScroll: (_, event) => {
         return event.target.dataset.noScroll == undefined;
       },
@@ -51,7 +52,7 @@
       display: grid;
       grid-template-columns: 100vw;
       grid-template-rows:
-        minmax(50vh, 1fr)
+        1fr
         auto
         auto;
       grid-template-areas: "workspace" "list" "control";
@@ -60,7 +61,7 @@
       display: grid;
       grid-template-columns: 100vw;
       grid-template-rows:
-        minmax(50vh, 1fr)
+        1fr
         auto
         auto;
       grid-template-areas: "workspace" "list" "control";

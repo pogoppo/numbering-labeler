@@ -74,7 +74,7 @@ export const readFile = (event: any) => {
         get(label),
         {
           fontSize: labelFontSize,
-          maxFontSize: labelFontSize * 2
+          maxFontSize: labelFontSize * 3
         }
       ));
 
@@ -88,12 +88,8 @@ export const readFile = (event: any) => {
       ));
 
       render_.set(Object.assign(get(render_), { zoom }));
+      render_.updateScroll();
       await tick();
-
-      get(render_).sbInstance.setPosition({
-        x: (imageSize.width - get(render_).workspace.clientWidth) / 2,
-        y: (imageSize.height - get(render_).workspace.clientHeight) / 2,
-      });
       ///////////////
 
       resolve(true);

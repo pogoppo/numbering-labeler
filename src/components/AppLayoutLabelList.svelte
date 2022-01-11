@@ -17,7 +17,7 @@
     overflow-y: auto;
     grid-area: list;
     background-color: rgba(0, 0, 0, 0.1);
-    max-height: 45vh;
+    max-height: calc(50vh - 96px); // 96pxは目安 TODO: 非マジックナンバーにする
     @include responsive(laptop) {
       display: grid;
       grid-template-rows: 1fr auto auto;

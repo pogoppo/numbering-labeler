@@ -50,7 +50,7 @@
           bind:value={$render_.zoom}
           min="0.1"
           max="1"
-          step="0.1"
+          step="0.05"
         />
         <SvgIcon type="mdi" path={mdiMagnifyPlusOutline} />
       </div>

@@ -10,7 +10,7 @@
   .AppLayoutRenderControls {
     grid-area: control;
     overflow-y: auto;
-    max-height: 45vh;
+    max-height: calc(50vh - 96px); // 96pxは目安 TODO: 非マジックナンバーにする
     background-color: rgba(0, 0, 0, 0.1);
     @include responsive(laptop) {
       max-height: 100vh;

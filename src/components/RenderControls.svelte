@@ -1,21 +1,16 @@
 <script lang="ts">
-  import { tick } from "svelte";
   import SvgIcon from "@jamescoyle/svelte-icon";
   import { mdiViewList, mdiLabel } from "@mdi/js";
 
   import { list, label as label_, render_ } from "~/stores/render-options";
   import { _ } from "svelte-i18n";
 
+  // リストに変更があった際にScrollBoosterの領域を再計算 //
   $: {
-    // リストに変更があった際にScrollBoosterの領域を再計算 //
-    $list.pos;
-    $list.overlay;
-    (async () => {
-      await tick();
-      $render_.sbInstance?.updateMetrics();
-    })();
-    /////////////////////////////////////////////////////
+    $list;
+    $render_.sbInstance?.updateMetrics();
   }
+  /////////////////////////////////////////////////////
 </script>
 
 <div class="RenderControls">
@@ -29,19 +24,28 @@
       <div class="RenderControls__switch">
         <span
           class:active={$list.pos == "bottom"}
-          on:click={() => ($list.pos = "bottom")}
+          on:click={() => {
+            $list.pos = "bottom";
+            render_.updateScroll();
+          }}
         >
           {$_("control.position.bottom")}
         </span>
         <span
           class:active={$list.pos == "right"}
-          on:click={() => ($list.pos = "right")}
+          on:click={() => {
+            $list.pos = "right";
+            render_.updateScroll();
+          }}
         >
           {$_("control.position.right")}
         </span>
         <span
           class:active={$list.overlay}
-          on:click={() => ($list.overlay = !$list.overlay)}
+          on:click={() => {
+            $list.overlay = !$list.overlay;
+            render_.updateScroll();
+          }}
         >
           {$_("control.position.stack")}
         </span>
@@ -168,6 +172,7 @@
         width: fit-content;
       }
       input[type="color"] {
+        width: 40px;
         height: 40px;
         margin-right: 8px;
       }

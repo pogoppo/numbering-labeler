@@ -86,7 +86,6 @@
     position: relative;
     width: max-content;
     height: max-content;
-    margin: auto;
     &[data-pos="right"] {
       display: flex;
     }
@@ -117,7 +116,6 @@
     &__list {
       list-style: none;
       margin: 0;
-      padding: 0.5em;
       background-color: var(--list-rgb);
       color: var(--list-font-color);
       font-size: var(--list-font-size);
@@ -126,10 +124,13 @@
         width: max-content;
         min-height: var(--image-height);
         max-height: var(--image-height);
+        padding: 1em;
         writing-mode: vertical-lr;
         > li {
           display: inline-flex;
-          align-items: flex-start;
+          align-items: baseline;
+          gap: 0.25em;
+          width: max-content;
           max-width: 12em;
           padding: 0.5em;
           writing-mode: horizontal-tb;
@@ -141,6 +142,7 @@
         flex-direction: column;
         flex-flow: row wrap;
         gap: 1em;
+        padding: 1em;
         min-width: var(--image-width);
         max-width: var(--image-width);
       }
