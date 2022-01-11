@@ -27,7 +27,7 @@
 <main>
   <AppLayoutWorkSpace />
   <MobileAccordion
-    disabled={!!!$labelList.length}
+    disabled={!!!$image.url}
     expand={false}
     title="ラベルの追加と画像のダウンロード"
   >
