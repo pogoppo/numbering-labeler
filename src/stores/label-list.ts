@@ -1,7 +1,6 @@
-import { get, writable } from "svelte/store";
+import { get, Readable, writable } from "svelte/store";
 
 import { image, label } from "~/stores/render-options";
-import labelList from "~/stores/label-list";
 
 interface ListItem {
   text: string,
@@ -27,7 +26,7 @@ export default {
   ...writable([] as ListItem[]),
   add(text: string) {
     const { x, y } = defaultXY(
-      get(labelList).length,
+      get(this as Readable<ListItem[]>).length,
       get(label).fontSize,
       get(image).width
     );
