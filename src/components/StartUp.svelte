@@ -4,6 +4,9 @@
 </script>
 
 <div class="StartUp">
+  <div class="StartUp__image">
+    <img src="completion-image.png" alt="" />
+  </div>
   <div class="StartUp__guide">
     <div class="StartUp__guide-section">
       <h2>Step 1</h2>
@@ -44,6 +47,13 @@
     max-width: 100%;
     margin: 16px auto;
     padding: 32px;
+    &__image {
+      display: flex;
+      justify-content: center;
+      > img {
+        max-width: 100%;
+      }
+    }
     &__guide {
       display: flex;
       flex-direction: column;
